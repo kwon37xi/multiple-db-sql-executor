@@ -1,6 +1,7 @@
 package kr.pe.kwonnam.multidbsql;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Group of databases;
@@ -20,6 +21,7 @@ public class DatabaseGroup {
     }
 
     public void setName(String name) {
+        Objects.requireNonNull(name, "group name must not be null.");
         this.name = name;
     }
 
