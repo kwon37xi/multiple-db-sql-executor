@@ -10,6 +10,7 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 
@@ -36,9 +37,7 @@ public class PropertiesConfigurationLoader implements DatabaseConfigurationLoade
 
         Properties properties = loadProperties(argument, path);
 
-        DatabaseGroup databaseGroup = buildDatabaseConfigurationFromProperties(properties);
-
-        return databaseGroup;
+        return buildDatabaseConfigurationFromProperties(properties);
     }
 
     private Path convertArgumentToPath(String argument) {
@@ -59,21 +58,35 @@ public class PropertiesConfigurationLoader implements DatabaseConfigurationLoade
         return properties;
     }
 
-    private DatabaseGroup buildDatabaseConfigurationFromProperties(Properties properties) {
+    DatabaseGroup buildDatabaseConfigurationFromProperties(Properties properties) {
         DatabaseGroup databaseGroup = new DatabaseGroup();
-        databaseGroup.setName(properties.getProperty("multidbsql.groupname"));
 
+        final String groupName = buildDatabaseName(properties);
+        databaseGroup.setName(groupName);
+
+        final List<String> classpaths = buildClasspaths(properties);
+        databaseGroup.setClasspaths(classpaths);
+
+        final List<Database> databases = buildDatabases(properties);
+        databaseGroup.setDatabases(databases);
+
+        return databaseGroup;
+    }
+
+    String buildDatabaseName(Properties properties) {
+        return properties.getProperty("multidbsql.groupname");
+    }
+
+    List<String> buildClasspaths(Properties properties) {
         final String classpathsProperty = properties.getProperty("multidbsql.classpath");
-        if (!StringUtils.isBlank(classpathsProperty)) {
-            final List<String> classpaths = Lists.newArrayList(classpathsProperty.split(","));
-            databaseGroup.setClasspaths(classpaths);
+        if (StringUtils.isBlank(classpathsProperty)) {
+            return Collections.emptyList();
         }
+        return Lists.newArrayList(classpathsProperty.split(","));
+    }
 
-        String databaseProperty = properties.getProperty("multidbsql.database");
-        if (StringUtils.isBlank(databaseProperty)) {
-            throw new IllegalArgumentException("'multidbsql.database' property is required.");
-        }
-        String [] databaseNames = databaseProperty.split(",");
+    List<Database> buildDatabases(Properties properties) {
+        String[] databaseNames = readDatabaseNames(properties);
 
         List<Database> databases = Lists.newArrayList();
 
@@ -93,9 +106,14 @@ public class PropertiesConfigurationLoader implements DatabaseConfigurationLoade
 
             databases.add(database);
         }
+        return databases;
+    }
 
-        databaseGroup.setDatabases(databases);
-
-        return databaseGroup;
+    private String[] readDatabaseNames(Properties properties) {
+        String databaseProperty = properties.getProperty("multidbsql.database");
+        if (StringUtils.isBlank(databaseProperty)) {
+            throw new IllegalArgumentException("'multidbsql.database' property is required.");
+        }
+        return databaseProperty.split(",");
     }
 }
