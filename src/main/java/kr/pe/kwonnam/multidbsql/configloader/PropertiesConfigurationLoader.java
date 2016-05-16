@@ -109,7 +109,7 @@ public class PropertiesConfigurationLoader implements DatabaseConfigurationLoade
         return databases;
     }
 
-    private String[] readDatabaseNames(Properties properties) {
+    String[] readDatabaseNames(Properties properties) {
         String databaseProperty = properties.getProperty("multidbsql.database");
         if (StringUtils.isBlank(databaseProperty)) {
             throw new IllegalArgumentException("'multidbsql.database' property is required.");

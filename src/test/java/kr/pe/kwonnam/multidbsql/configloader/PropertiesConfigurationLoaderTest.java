@@ -7,6 +7,8 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Properties;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
 
@@ -54,5 +56,22 @@ public class PropertiesConfigurationLoaderTest {
         assertThat(dbGroup.getClasspaths()).hasSize(2).contains("/somewhere/mysql_jdbc.jar", "postgresql.jar");
         assertThat(dbGroup.getDatabases()).hasSize(2)
             .containsOnly(new Database("db1"), new Database("디비2"));
+    }
+
+    @Test
+    public void readDatabaseNames_no_name() throws Exception {
+        Properties properties = new Properties(); // no props.
+        try {
+            loader.readDatabaseNames(properties);
+            failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
+        } catch (IllegalArgumentException ex) {
+            assertThat(ex).hasMessage("'multidbsql.database' property is required.");
+        }
+    }
+
+    @Test
+    public void buildClasspaths_no_classpath() throws Exception {
+        Properties properties = new Properties();
+        assertThat(loader.buildClasspaths(properties)).isEmpty();
     }
 }
