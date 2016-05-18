@@ -64,6 +64,9 @@ public class PropertiesConfigurationLoader implements DatabaseConfigurationLoade
         final String groupName = buildDatabaseName(properties);
         databaseGroup.setName(groupName);
 
+        final String driverClassName = buildDriverClassName(properties);
+        databaseGroup.setDriverClassName(driverClassName);
+
         final List<String> classpaths = buildClasspaths(properties);
         databaseGroup.setClasspaths(classpaths);
 
@@ -75,6 +78,10 @@ public class PropertiesConfigurationLoader implements DatabaseConfigurationLoade
 
     String buildDatabaseName(Properties properties) {
         return properties.getProperty("multidbsql.groupname");
+    }
+
+    String buildDriverClassName(Properties properties) {
+        return properties.getProperty("multidbsql.driverclassname");
     }
 
     List<String> buildClasspaths(Properties properties) {

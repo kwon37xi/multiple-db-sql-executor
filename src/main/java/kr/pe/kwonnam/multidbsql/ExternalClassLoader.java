@@ -7,7 +7,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -44,6 +43,11 @@ public class ExternalClassLoader {
         return Collections.unmodifiableList(urls);
     }
 
+    /**
+     * Load class from external classpaths.
+     * @param className
+     * @return
+     */
     public Class<?> loadClass(String className) {
         try {
             return urlClassLoader.loadClass(className);

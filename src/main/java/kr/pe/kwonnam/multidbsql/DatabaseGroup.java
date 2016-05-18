@@ -10,6 +10,9 @@ public class DatabaseGroup {
     /** Database group name */
     private String name;
 
+    /** JDBC Driver Class name */
+    private String driverClassName;
+
     /** external jdbc library classpaths */
     private List<String> classpaths;
 
@@ -23,6 +26,14 @@ public class DatabaseGroup {
     public void setName(String name) {
         Objects.requireNonNull(name, "group name must not be null.");
         this.name = name;
+    }
+
+    public String getDriverClassName() {
+        return driverClassName;
+    }
+
+    public void setDriverClassName(String driverClassName) {
+        this.driverClassName = driverClassName;
     }
 
     public List<String> getClasspaths() {

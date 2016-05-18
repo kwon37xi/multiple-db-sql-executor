@@ -53,6 +53,7 @@ public class PropertiesConfigurationLoaderTest {
         final DatabaseGroup dbGroup = loader.load("src/test/resources/test_config.properties");
 
         assertThat(dbGroup.getName()).isEqualTo("MultiDBSQL 테스트");
+        assertThat(dbGroup.getDriverClassName()).isEqualTo("org.h2.Driver");
         assertThat(dbGroup.getClasspaths()).hasSize(2).contains("/somewhere/mysql_jdbc.jar", "postgresql.jar");
         assertThat(dbGroup.getDatabases()).hasSize(2)
             .containsOnly(new Database("db1"), new Database("디비2"));
