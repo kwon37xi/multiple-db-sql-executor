@@ -24,20 +24,16 @@ public class SqlExecutor {
         externalClassLoader.loadClass(databaseGroup.getDriverClassName());
     }
 
-    public void executeSql(Database database, String sql) {
+    public void executeSql(Database database, String sql, StatementResultProcessor processor) {
         if (StringUtils.isBlank(sql)) {
             return;
         }
 
-        final Connection connection = getConnection(database);
-        try {
-            final Statement statement = connection.createStatement();
-
-            final boolean executionType = statement.execute(sql);
-            // executionType true : 쿼리로 ResultSet 존재
-            // executionType false : update 로 ResultSet 없음
-        } catch (SQLException e) {
-            throw new IllegalStateException(e.getMessage(), e);
+        try (Connection connection = getConnection(database); Statement statement = connection.createStatement()) {
+            statement.execute(sql);
+            processor.process(statement);
+        } catch (Exception e) {
+            processor.processException(e);
         }
     }
 
