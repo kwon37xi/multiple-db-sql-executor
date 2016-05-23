@@ -6,22 +6,24 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.input.KeyCodeCombination?>
 <?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.control.Button?>
 <VBox xmlns:fx="http://javafx.com/fxml" fx:controller="kr.pe.kwonnam.multidbsql.main.MainController">
     <padding>
-        <Insets topRightBottomLeft="10.0"/>
+        <Insets topRightBottomLeft="0.0"/>
     </padding>
 
     <children>
         <MenuBar>
             <menus>
-                <Menu text="F_ile">
+                <Menu text="_File">
                     <items>
-                        <MenuItem text="L_oad Properties">
+                        <MenuItem text="_Open Properties">
                             <accelerator>
                                 <KeyCodeCombination control="DOWN" shift="UP" alt="UP" meta="UP" shortcut="UP" code="O"/>
                             </accelerator>
                         </MenuItem>
-                        <MenuItem text="Ex_it">
+                        <MenuItem text="E_xit" onAction="#handleExit">
                             <accelerator>
                                 <KeyCodeCombination control="DOWN" shift="UP" alt="UP" meta="UP" shortcut="UP" code="X"/>
                             </accelerator>
@@ -30,6 +32,14 @@
                 </Menu>
             </menus>
         </MenuBar>
+        <ToolBar>
+            <items>
+                <Button text="Execute"/>
+                <Button text="Save As CSV"/>
+                <Button text="Save As Excel"/>
+            </items>
+        </ToolBar>
         <TextArea fx:id="sql"/>
+        <TextArea fx:id="results"/>
     </children>
 </VBox>
