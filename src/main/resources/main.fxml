@@ -18,7 +18,7 @@
             <menus>
                 <Menu text="_File">
                     <items>
-                        <MenuItem text="_Open Properties">
+                        <MenuItem text="_Open Properties" onAction="#handleOpenProperties">
                             <accelerator>
                                 <KeyCodeCombination control="DOWN" shift="UP" alt="UP" meta="UP" shortcut="UP" code="O"/>
                             </accelerator>

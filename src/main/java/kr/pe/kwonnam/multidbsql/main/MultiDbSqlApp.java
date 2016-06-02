@@ -13,7 +13,12 @@ public class MultiDbSqlApp extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("MultiDB SQL Executor");
-        Parent root = FXMLLoader.load(getClass().getResource("/main.fxml"));
+
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/main.fxml"));
+
+        Parent root = fxmlLoader.load();
+        final MainController mainController = fxmlLoader.getController();
+        mainController.setPrimaryStage(primaryStage);
 
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
