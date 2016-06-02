@@ -1,7 +1,5 @@
 package kr.pe.kwonnam.multidbsql;
 
-import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,12 +8,13 @@ import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Predicate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
 
 public class ExternalClassLoaderTest {
+    public static final String TEST_JAR = "src/test/resources/h2-1.3.176.jar";
+    public static final String TEST_JAR2 = "/some/where/test.jar";
     private Logger log = LoggerFactory.getLogger(ExternalClassLoaderTest.class);
 
     @Test
@@ -41,23 +40,23 @@ public class ExternalClassLoaderTest {
     @Test
     public void getUrls() throws Exception {
         List<String> classpaths = new ArrayList<>();
-        classpaths.add("src/test/resources/h2-1.3.176.jar");
-        classpaths.add("/some/where/test.jar");
+        classpaths.add(TEST_JAR);
+        classpaths.add(TEST_JAR2);
 
         ExternalClassLoader externalClassLoader = new ExternalClassLoader(classpaths);
 
         final List<URL> urls = externalClassLoader.getUrls();
         assertThat(urls).hasSize(2)
             .contains(
-                new File("src/test/resources/h2-1.3.176.jar").toURI().toURL(),
-                new File("/some/where/test.jar").toURI().toURL()
+                new File(TEST_JAR).toURI().toURL(),
+                new File(TEST_JAR2).toURI().toURL()
             );
     }
 
     @Test
     public void loadClass() throws Exception {
         List<String> classpaths = new ArrayList<>();
-        classpaths.add("src/test/resources/h2-1.3.176.jar");
+        classpaths.add(TEST_JAR);
 
         ExternalClassLoader externalClassLoader = new ExternalClassLoader(classpaths);
         final Class<?> h2Driver = externalClassLoader.loadClass("org.h2.Driver");
